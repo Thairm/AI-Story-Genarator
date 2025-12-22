@@ -34,7 +34,7 @@ const generateMockScript = (prompt: string): ScriptSection[] => {
   ];
 };
 
-export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptSection[]> => {
+export const enhanceStoryPrompt = async (currentPrompt: string, customSystemPrompt?: string): Promise<ScriptSection[]> => {
   if (!currentPrompt.trim()) return [];
 
   // Safety Timeout: If Backend takes > 60 seconds, fallback to mock.
@@ -51,7 +51,10 @@ export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptS
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ prompt: currentPrompt }),
+      body: JSON.stringify({
+        prompt: currentPrompt,
+        customSystemPrompt: customSystemPrompt
+      }),
       signal: controller.signal
     });
 

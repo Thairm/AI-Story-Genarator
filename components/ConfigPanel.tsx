@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { VideoConfig, GenerationStatus, ScriptSection, ScriptSentence, AnimationType } from '../types';
+import { VideoConfig, GenerationStatus, ScriptSection, ScriptSentence, AnimationType, DEFAULT_SYSTEM_PROMPT } from '../types';
 import { NARRATORS, BACKGROUNDS, CAPTION_ANIMATIONS, CAPTION_THEMES, CAPTION_FONTS } from '../constants';
-import { Wand2, ScrollText, Captions, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, AlertCircle, Palette, Type as TypeIcon } from 'lucide-react';
+import { Wand2, ScrollText, Captions, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, AlertCircle, Palette, Type as TypeIcon, Settings } from 'lucide-react';
 import { enhanceStoryPrompt } from '../services/geminiService';
 import { renderVideo } from '../services/videoRenderer';
 import { generateSpeech } from '../services/audioService';
 import { localStorageProvider } from '../services/storage/videoHistoryService';
+import SystemPromptModal from './SystemPromptModal';
 
 interface ConfigPanelProps {
   config: VideoConfig;
@@ -133,6 +134,8 @@ const LiveCaptionPreview = ({
 export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConfigChange, setStatus, setVideoUrl, setProgress, progress }) => {
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
+  const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
+  const [customSystemPrompt, setCustomSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
 
   const handleEnhance = async () => {
     // If empty prompt, don't run
@@ -142,7 +145,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
     setStatus(GenerationStatus.GENERATING_SCRIPT);
 
     try {
-      const result: ScriptSection[] = await enhanceStoryPrompt(config.prompt);
+      const result: ScriptSection[] = await enhanceStoryPrompt(config.prompt, customSystemPrompt);
       onConfigChange({ ...config, script: result });
     } finally {
       setIsEnhancing(false);
@@ -329,6 +332,13 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
                 <span className="w-6 h-6 rounded-full bg-zinc-800 border border-zinc-700 text-xs flex items-center justify-center mr-3 text-zinc-300">1</span>
                 Story Concept
               </h2>
+              <button
+                onClick={() => setIsPromptModalOpen(true)}
+                className="p-2 text-zinc-400 hover:text-orange-400 hover:bg-zinc-800 rounded-lg transition-colors"
+                title="Customize AI System Prompt"
+              >
+                <Settings className="w-5 h-5" />
+              </button>
             </div>
 
             <div className="bg-zinc-800/50 rounded-xl border border-zinc-700/50 overflow-hidden">
@@ -712,6 +722,14 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
           </section>
         </div>
       </div>
+
+      {/* System Prompt Modal */}
+      <SystemPromptModal
+        isOpen={isPromptModalOpen}
+        onClose={() => setIsPromptModalOpen(false)}
+        currentPrompt={customSystemPrompt}
+        onSave={setCustomSystemPrompt}
+      />
     </div>
   );
 };
