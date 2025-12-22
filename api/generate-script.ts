@@ -58,18 +58,19 @@ export default async function handler(request, response) {
     if (!openaiResponse.ok) {
       const errorData = await openaiResponse.json();
       console.error("OpenAI API Error:", errorData);
-      throw new Error(errorData.error?.message || 'OpenAI API Error');
+      // Return the specific OpenAI error to the frontend
+      return response.status(500).json({ error: `OpenAI Error: ${errorData.error?.message || 'Unknown OpenAI Error'}` });
     }
 
     const data = await openaiResponse.json();
     const content = data.choices?.[0]?.message?.content || '[]';
 
     // 4. Send the result back to the frontend
-    // The frontend expects { text: "json string" }
     return response.status(200).json({ text: content });
 
   } catch (error) {
     console.error("Backend Generator Error:", error);
-    return response.status(500).json({ error: "Failed to generate script" });
+    // Return the specific exception message
+    return response.status(500).json({ error: `Server Error: ${error instanceof Error ? error.message : 'Unknown Error'}` });
   }
 }

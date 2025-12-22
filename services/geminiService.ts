@@ -58,7 +58,14 @@ export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptS
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`Backend API Error: ${response.status}`);
+      let errorMessage = `Backend API Error: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errorMessage = errorData.error;
+      } catch (e) {
+        // If response isn't JSON, stick with status code
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
