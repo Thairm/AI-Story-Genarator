@@ -24,7 +24,7 @@ export default async function handler(request, response) {
     1. **Perspective**: ALWAYS write in the **First Person ("I", "Me", "My")**. You are the protagonist telling your own story.
     2. **Length**: The total story MUST be between **200 and 300 words**. Keep it concise and fast-paced for short-form video.
     3. **Tone**: Conversational, slightly dramatic, and engaging. Like you are telling a crazy secret to a friend.
-    4. **Structure**: Start with a strong hook. Build tension quickly. End with a clear resolution or twist.
+    4. **Formatting**: Split the story into **at least 3 distinct sections** (e.g., "The Hook", "The Story", "The Conclusion"). Do NOT put the entire story in one section.
     
     Return ONLY a valid JSON object. The JSON structure must be:
     {
