@@ -115,9 +115,6 @@ export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptS
   } catch (error) {
     console.warn("Backend Unreachable (Switching to Offline Mock).", error);
 
-    // DEBUG: Alert the user so they know why it's failing
-    alert(`API Error: ${error instanceof Error ? error.message : 'Unknown Error'}. Using mock data.`);
-
     // Simulate a small delay for "thinking" feel in offline mode
     await new Promise(resolve => setTimeout(resolve, 1500));
     return generateMockScript(currentPrompt);
