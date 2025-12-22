@@ -37,9 +37,9 @@ const generateMockScript = (prompt: string): ScriptSection[] => {
 export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptSection[]> => {
   if (!currentPrompt.trim()) return [];
 
-  // Safety Timeout: If Backend takes > 8 seconds, fallback to mock.
+  // Safety Timeout: If Backend takes > 60 seconds, fallback to mock.
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const timeoutId = setTimeout(() => controller.abort(), 60000);
 
   try {
     // Call the Vercel Backend Function
@@ -114,6 +114,9 @@ export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptS
 
   } catch (error) {
     console.warn("Backend Unreachable (Switching to Offline Mock).", error);
+
+    // DEBUG: Alert the user so they know why it's failing
+    alert(`API Error: ${error instanceof Error ? error.message : 'Unknown Error'}. Using mock data.`);
 
     // Simulate a small delay for "thinking" feel in offline mode
     await new Promise(resolve => setTimeout(resolve, 1500));
