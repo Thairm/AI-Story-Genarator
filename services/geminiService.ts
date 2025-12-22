@@ -63,7 +63,7 @@ export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptS
 
     const data = await response.json();
     const text = data.text || '[]';
-    
+
     // Parse JSON response from AI
     let parsedData = [];
     try {
@@ -93,12 +93,15 @@ export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptS
     }));
 
   } catch (error) {
-    console.warn("Backend Unreachable (Switching to Offline Mock). If running locally, this is expected unless using 'vercel dev'.", error);
-    
+    console.warn("Backend Unreachable (Switching to Offline Mock).", error);
+
+    // DEBUG: Alert the user so they know why it's failing
+    alert(`API Error: ${error instanceof Error ? error.message : 'Unknown Error'}. Using mock data.`);
+
     // Simulate a small delay for "thinking" feel in offline mode
     await new Promise(resolve => setTimeout(resolve, 1500));
     return generateMockScript(currentPrompt);
-    
+
   } finally {
     clearTimeout(timeoutId);
   }
