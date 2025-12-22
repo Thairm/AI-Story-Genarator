@@ -21,15 +21,17 @@ export default async function handler(request, response) {
     Split the story into logical narrative sections (e.g., The Hook, The Setup, The Conflict, The Climax, The Resolution). 
     Use as many sections as necessary to tell the story effectively.
     
-    Return ONLY a valid JSON array. The JSON structure must be:
-    [
-      {
-        "title": "Section Title",
-        "sentences": ["Sentence 1", "Sentence 2"]
-      }
-    ]
+    Return ONLY a valid JSON object. The JSON structure must be:
+    {
+      "script": [
+        {
+          "title": "Section Title",
+          "sentences": ["Sentence 1", "Sentence 2"]
+        }
+      ]
+    }
     
-    Do not include any markdown formatting, code blocks, or extra text. Only return the raw JSON array.`;
+    Do not include any markdown formatting, code blocks, or extra text. Only return the raw JSON object.`;
 
     // 3. Call OpenAI API
     const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {

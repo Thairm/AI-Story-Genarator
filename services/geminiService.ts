@@ -72,9 +72,22 @@ export const enhanceStoryPrompt = async (currentPrompt: string): Promise<ScriptS
     const text = data.text || '[]';
 
     // Parse JSON response from AI
-    let parsedData = [];
+    let parsedData: any[] = [];
     try {
-      parsedData = JSON.parse(text);
+      const json = JSON.parse(text);
+      if (Array.isArray(json)) {
+        parsedData = json;
+      } else if (json.script && Array.isArray(json.script)) {
+        parsedData = json.script;
+      } else {
+        // Fallback: try to find any array in the object
+        const possibleArray = Object.values(json).find(val => Array.isArray(val));
+        if (possibleArray) {
+          parsedData = possibleArray as any[];
+        } else {
+          throw new Error("Invalid JSON structure: No array found");
+        }
+      }
     } catch (e) {
       console.error("Failed to parse AI JSON response", e);
       // Fallback if JSON fails to parse but we got text
