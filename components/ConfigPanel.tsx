@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { VideoConfig, GenerationStatus, ScriptSection, ScriptSentence, AnimationType, DEFAULT_SYSTEM_PROMPT } from '../types';
 import { NARRATORS, BACKGROUNDS, CAPTION_ANIMATIONS, CAPTION_THEMES, CAPTION_FONTS } from '../constants';
-import { Wand2, ScrollText, Captions, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, AlertCircle, Palette, Type as TypeIcon, Settings } from 'lucide-react';
+import { Wand2, ScrollText, Captions, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, AlertCircle, Palette, Type as TypeIcon, Settings, Sparkles, ChevronDown } from 'lucide-react';
 import { enhanceStoryPrompt } from '../services/geminiService';
 import { renderVideo } from '../services/videoRenderer';
 import { generateSpeech } from '../services/audioService';
 import { localStorageProvider } from '../services/storage/videoHistoryService';
+import { generateStoryIdea, STORY_CATEGORIES } from '../services/ideaService';
 import SystemPromptModal from './SystemPromptModal';
 
 interface ConfigPanelProps {
@@ -136,6 +137,23 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
   const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
   const [customSystemPrompt, setCustomSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
+  const [selectedCategory, setSelectedCategory] = useState('random');
+  const [isGeneratingIdea, setIsGeneratingIdea] = useState(false);
+
+  const handleGenerateIdea = async () => {
+    setIsGeneratingIdea(true);
+    try {
+      const idea = await generateStoryIdea(selectedCategory);
+      if (idea) {
+        onConfigChange({ ...config, prompt: idea });
+      }
+    } catch (error) {
+      console.error('Failed to generate idea:', error);
+      alert('Failed to generate story idea. Please try again.');
+    } finally {
+      setIsGeneratingIdea(false);
+    }
+  };
 
   const handleEnhance = async () => {
     // If empty prompt, don't run
@@ -343,6 +361,41 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
 
             <div className="bg-zinc-800/50 rounded-xl border border-zinc-700/50 overflow-hidden">
               <div className="p-5">
+                {/* Category Dropdown + Generate Idea Button */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="relative">
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="appearance-none bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2 pr-10 text-sm text-zinc-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 cursor-pointer"
+                    >
+                      {STORY_CATEGORIES.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+                  </div>
+                  <button
+                    onClick={handleGenerateIdea}
+                    disabled={isGeneratingIdea || isGenerating}
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-sm font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/20"
+                  >
+                    {isGeneratingIdea ? (
+                      <>
+                        <Sparkles className="w-4 h-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Generate Idea
+                      </>
+                    )}
+                  </button>
+                </div>
+
                 <div className="relative">
                   <textarea
                     value={config.prompt}
