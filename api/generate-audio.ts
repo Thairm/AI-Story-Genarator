@@ -6,7 +6,7 @@ export default async function handler(request, response) {
   }
 
   try {
-    const { text, voiceId } = request.body;
+    const { text, voiceId, voiceSettings } = request.body;
     const apiKey = process.env.ELEVENLABS_API_KEY;
 
     // Fallback Mock Mode if API Key is missing
@@ -15,10 +15,18 @@ export default async function handler(request, response) {
       return response.status(503).json({ error: "Service Unavailable: Missing API Key" });
     }
 
-    // ElevenLabs API Endpoint
-    // We use the REST API with the `with_timestamps` query param to get alignment data.
+    // Default voice settings (Flash v2.5 compatible)
+    const settings = {
+      stability: voiceSettings?.stability ?? 0.5,
+      similarity_boost: voiceSettings?.similarityBoost ?? 0.75,
+      style: voiceSettings?.style ?? 0,
+      use_speaker_boost: voiceSettings?.useSpeakerBoost ?? false,
+      speed: voiceSettings?.speed ?? 1.0
+    };
+
+    // ElevenLabs API Endpoint with timestamps
     const elevenLabsUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/with-timestamps`;
-    
+
     const ttsResponse = await fetch(elevenLabsUrl, {
       method: 'POST',
       headers: {
@@ -27,11 +35,8 @@ export default async function handler(request, response) {
       },
       body: JSON.stringify({
         text: text,
-        model_id: "eleven_monolingual_v1",
-        voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.75
-        }
+        model_id: "eleven_flash_v2_5",
+        voice_settings: settings
       })
     });
 
@@ -41,7 +46,7 @@ export default async function handler(request, response) {
     }
 
     const data = await ttsResponse.json();
-    
+
     // The response is a JSON object with:
     // {
     //   "audio_base64": "...",

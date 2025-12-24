@@ -3,8 +3,26 @@ export interface Narrator {
   id: string;
   name: string;
   style: string;
+  gender: 'male' | 'female';
   previewUrl?: string;
 }
+
+// ElevenLabs Flash v2.5 Voice Settings
+export interface VoiceSettings {
+  stability: number;        // 0-1, default 0.5 - Lower = expressive, Higher = consistent
+  similarityBoost: number;  // 0-1, default 0.75 - How closely to match original voice
+  speed: number;            // 0.7-1.2, default 1.0 - Speech pace
+  style: number;            // 0-1, default 0 - Style exaggeration
+  useSpeakerBoost: boolean; // default false - Improves number/unit reading
+}
+
+export const DEFAULT_VOICE_SETTINGS: VoiceSettings = {
+  stability: 0.5,
+  similarityBoost: 0.75,
+  speed: 1.0,
+  style: 0,
+  useSpeakerBoost: false
+};
 
 export interface BackgroundOption {
   id: string;

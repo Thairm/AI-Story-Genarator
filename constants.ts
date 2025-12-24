@@ -2,10 +2,20 @@
 import { BackgroundOption, Narrator, CaptionAnimation, CaptionTheme, CaptionFont } from "./types";
 
 export const NARRATORS: Narrator[] = [
-  { id: 'adam', name: 'Adam', style: 'Deep & Authoritative' },
-  { id: 'bella', name: 'Bella', style: 'Soft & Storyteller' },
-  { id: 'antoni', name: 'Antoni', style: 'Energetic & Viral' },
-  { id: 'rachel', name: 'Rachel', style: 'Calm & Professional' },
+  // Male Voices
+  { id: 'adam', name: 'Adam', style: 'Deep, Authoritative', gender: 'male' },
+  { id: 'josh', name: 'Josh', style: 'Deep, Narrator', gender: 'male' },
+  { id: 'clyde', name: 'Clyde', style: 'War Veteran, Intense', gender: 'male' },
+  { id: 'charlie', name: 'Charlie', style: 'Casual, Natural', gender: 'male' },
+  { id: 'james', name: 'James', style: 'Deep, Australian', gender: 'male' },
+  { id: 'sam', name: 'Sam', style: 'Raspy, Dynamic', gender: 'male' },
+  // Female Voices
+  { id: 'rachel', name: 'Rachel', style: 'Calm, Professional', gender: 'female' },
+  { id: 'freya', name: 'Freya', style: 'Dramatic, Expressive', gender: 'female' },
+  { id: 'emily', name: 'Emily', style: 'Calm, Soothing', gender: 'female' },
+  { id: 'matilda', name: 'Matilda', style: 'Warm, Friendly', gender: 'female' },
+  { id: 'jessie', name: 'Jessie', style: 'Raspy, Intense', gender: 'female' },
+  { id: 'dorothy', name: 'Dorothy', style: 'Pleasant, British', gender: 'female' },
 ];
 
 export const CAPTION_ANIMATIONS: CaptionAnimation[] = [
@@ -16,23 +26,23 @@ export const CAPTION_ANIMATIONS: CaptionAnimation[] = [
 ];
 
 export const CAPTION_FONTS: CaptionFont[] = [
-  { 
-    id: 'bold', 
-    name: 'Bold Sans', 
-    family: 'Inter', 
-    url: 'https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter-Black.ttf' 
+  {
+    id: 'bold',
+    name: 'Bold Sans',
+    family: 'Inter',
+    url: 'https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter-Black.ttf'
   },
-  { 
-    id: 'comic', 
-    name: 'Comic', 
-    family: 'Bangers', 
-    url: 'https://raw.githubusercontent.com/google/fonts/main/ofl/bangers/Bangers-Regular.ttf' 
+  {
+    id: 'comic',
+    name: 'Comic',
+    family: 'Bangers',
+    url: 'https://raw.githubusercontent.com/google/fonts/main/ofl/bangers/Bangers-Regular.ttf'
   },
-  { 
-    id: 'typewriter', 
-    name: 'Typewriter', 
-    family: 'RobotoMono', 
-    url: 'https://raw.githubusercontent.com/google/fonts/main/ofl/robotomono/RobotoMono-Bold.ttf' 
+  {
+    id: 'typewriter',
+    name: 'Typewriter',
+    family: 'RobotoMono',
+    url: 'https://raw.githubusercontent.com/google/fonts/main/ofl/robotomono/RobotoMono-Bold.ttf'
   },
 ];
 
@@ -46,21 +56,21 @@ export const CAPTION_THEMES: CaptionTheme[] = [
 ];
 
 export const BACKGROUNDS: BackgroundOption[] = [
-  { 
-    id: 'minecraft', 
-    name: 'Minecraft Parkour', 
+  {
+    id: 'minecraft',
+    name: 'Minecraft Parkour',
     thumbnail: 'https://picsum.photos/seed/minecraft_parkour/300/533',
     videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'
   },
-  { 
-    id: 'gta', 
-    name: 'GTA V Ramps', 
-    thumbnail: 'https://picsum.photos/seed/gta_ramps/300/533' 
+  {
+    id: 'gta',
+    name: 'GTA V Ramps',
+    thumbnail: 'https://picsum.photos/seed/gta_ramps/300/533'
   },
-  { 
-    id: 'subway', 
-    name: 'Subway Surfers', 
-    thumbnail: 'https://picsum.photos/seed/subway_surfers/300/533' 
+  {
+    id: 'subway',
+    name: 'Subway Surfers',
+    thumbnail: 'https://picsum.photos/seed/subway_surfers/300/533'
   },
   {
     id: 'satisfying',

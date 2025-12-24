@@ -1,12 +1,22 @@
 
-import { ScriptSentence, WordTimestamp } from "../types";
+import { ScriptSentence, WordTimestamp, VoiceSettings, DEFAULT_VOICE_SETTINGS } from "../types";
 
 // Map our internal IDs to ElevenLabs Voice IDs
 const VOICE_MAP: Record<string, string> = {
-  'adam': 'pNInz6obpgDQGcFmaJgB', // Adam
-  'bella': 'EXAVITQu4vr4xnSDxMaL', // Bella
-  'antoni': 'ErXwobaYiN019PkySvjV', // Antoni
-  'rachel': '21m00Tcm4TlvDq8ikWAM', // Rachel
+  // Male Voices
+  'adam': 'pNInz6obpgDQGcFmaJgB',
+  'josh': 'TxGEqnHWrfWFTfGW9XjX',
+  'clyde': '2EiwWnXFnvU5JabPnv8n',
+  'charlie': 'IKne3meq5aSn9XLyUdCD',
+  'james': 'ZQe5CZNOzWyzPSCn5a3c',
+  'sam': 'yoZ06aMxZJJ28mfd3POQ',
+  // Female Voices
+  'rachel': '21m00Tcm4TlvDq8ikWAM',
+  'freya': 'jsCqWAovK2LkecY7zXl4',
+  'emily': 'LcfcDJNUP1GQjkzn1xUU',
+  'matilda': 'XrExE9yKIg1WjnnlVkGX',
+  'jessie': 't0jbNlBVZ17f02VDIeMI',
+  'dorothy': 'ThT5KcBeYPX3keUQqHPh',
 };
 
 // Helper to get duration of audio blob
@@ -112,7 +122,8 @@ const base64ToBlob = (base64: string, type: string = 'audio/mpeg'): Blob => {
 
 export const generateSpeech = async (
   sentence: ScriptSentence,
-  narratorId: string
+  narratorId: string,
+  voiceSettings: VoiceSettings = DEFAULT_VOICE_SETTINGS
 ): Promise<ScriptSentence> => {
   try {
     const voiceId = VOICE_MAP[narratorId] || VOICE_MAP['adam'];
@@ -125,7 +136,8 @@ export const generateSpeech = async (
       },
       body: JSON.stringify({
         text: sentence.text,
-        voiceId: voiceId
+        voiceId: voiceId,
+        voiceSettings: voiceSettings
       })
     });
 

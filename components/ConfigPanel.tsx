@@ -1,14 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
-import { VideoConfig, GenerationStatus, ScriptSection, ScriptSentence, AnimationType, DEFAULT_SYSTEM_PROMPT } from '../types';
+import { VideoConfig, GenerationStatus, ScriptSection, ScriptSentence, AnimationType, DEFAULT_SYSTEM_PROMPT, VoiceSettings, DEFAULT_VOICE_SETTINGS } from '../types';
 import { NARRATORS, BACKGROUNDS, CAPTION_ANIMATIONS, CAPTION_THEMES, CAPTION_FONTS } from '../constants';
-import { Wand2, ScrollText, Captions, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, AlertCircle, Palette, Type as TypeIcon, Settings, Sparkles, ChevronDown } from 'lucide-react';
+import { Wand2, ScrollText, Captions, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, AlertCircle, Palette, Type as TypeIcon, Settings, Sparkles, ChevronDown, Menu } from 'lucide-react';
 import { enhanceStoryPrompt } from '../services/geminiService';
 import { renderVideo } from '../services/videoRenderer';
 import { generateSpeech } from '../services/audioService';
 import { localStorageProvider } from '../services/storage/videoHistoryService';
 import { generateStoryIdea, STORY_CATEGORIES } from '../services/ideaService';
 import SystemPromptModal from './SystemPromptModal';
+import VoiceSettingsModal from './VoiceSettingsModal';
 
 interface ConfigPanelProps {
   config: VideoConfig;
@@ -139,6 +140,8 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
   const [customSystemPrompt, setCustomSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
   const [selectedCategory, setSelectedCategory] = useState('random');
   const [isGeneratingIdea, setIsGeneratingIdea] = useState(false);
+  const [isVoiceSettingsOpen, setIsVoiceSettingsOpen] = useState(false);
+  const [voiceSettings, setVoiceSettings] = useState<VoiceSettings>(DEFAULT_VOICE_SETTINGS);
 
   const handleGenerateIdea = async () => {
     setIsGeneratingIdea(true);
@@ -189,7 +192,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
           const sentence = section.sentences[j];
           // Only generate if no audio exists or if text changed (implied by user action usually, but here we just check existence)
           if (!sentence.audioUrl) {
-            const updatedSentence = await generateSpeech(sentence, config.narratorId);
+            const updatedSentence = await generateSpeech(sentence, config.narratorId, voiceSettings);
             newSentences.push(updatedSentence);
             updatedCount++;
           } else {
@@ -555,19 +558,71 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
             </div>
           </section>
 
-          {/* Step 2: Voice & Captions (UNCHANGED) */}
+          {/* Step 2: Voice & Captions */}
           <section>
-            <h2 className="text-lg font-semibold text-white flex items-center mb-4">
-              <span className="w-6 h-6 rounded-full bg-zinc-800 border border-zinc-700 text-xs flex items-center justify-center mr-3 text-zinc-300">2</span>
-              Voice & Captions
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-white flex items-center">
+                <span className="w-6 h-6 rounded-full bg-zinc-800 border border-zinc-700 text-xs flex items-center justify-center mr-3 text-zinc-300">2</span>
+                Voice & Captions
+              </h2>
+              <button
+                onClick={() => setIsVoiceSettingsOpen(true)}
+                className="p-2 text-zinc-400 hover:text-orange-400 hover:bg-zinc-800 rounded-lg transition-colors"
+                title="Voice Settings"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            </div>
             <div className="space-y-8">
 
-              {/* Voice Selection */}
+              {/* Voice Selection - Grouped by Gender */}
               <div>
-                <label className="block text-sm font-medium text-zinc-400 mb-3">Narrator</label>
+                {/* Male Voices */}
+                <label className="block text-sm font-medium text-zinc-400 mb-3 flex items-center gap-2">
+                  <span>👨</span> Male Voices
+                </label>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-6">
+                  {NARRATORS.filter(n => n.gender === 'male').map((n) => (
+                    <div
+                      key={n.id}
+                      onClick={() => updateConfig('narratorId', n.id)}
+                      className={`
+                        flex items-center p-2 rounded-lg border cursor-pointer transition-all
+                        ${config.narratorId === n.id
+                          ? 'bg-amber-500/10 border-amber-500 ring-1 ring-amber-500/50'
+                          : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800'}
+                      `}
+                    >
+                      <button
+                        onClick={(e) => toggleVoicePreview(e, n.id)}
+                        className={`
+                          w-8 h-8 rounded-full flex items-center justify-center mr-3 shrink-0 transition-all
+                          ${playingVoiceId === n.id
+                            ? 'bg-amber-500 text-white'
+                            : 'bg-zinc-700 text-zinc-400 hover:bg-amber-500 hover:text-white'}
+                        `}
+                      >
+                        {playingVoiceId === n.id ? <Pause size={12} fill="currentColor" /> : <Play size={12} fill="currentColor" />}
+                      </button>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-zinc-200 truncate">{n.name}</div>
+                        <div className="text-[10px] text-zinc-500 truncate">{n.style}</div>
+                      </div>
+
+                      {config.narratorId === n.id && (
+                        <div className="w-2 h-2 bg-amber-500 rounded-full mr-1 shadow-[0_0_6px_rgba(99,102,241,0.8)]"></div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Female Voices */}
+                <label className="block text-sm font-medium text-zinc-400 mb-3 flex items-center gap-2">
+                  <span>👩</span> Female Voices
+                </label>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                  {NARRATORS.map((n) => (
+                  {NARRATORS.filter(n => n.gender === 'female').map((n) => (
                     <div
                       key={n.id}
                       onClick={() => updateConfig('narratorId', n.id)}
@@ -782,6 +837,14 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
         onClose={() => setIsPromptModalOpen(false)}
         currentPrompt={customSystemPrompt}
         onSave={setCustomSystemPrompt}
+      />
+
+      {/* Voice Settings Modal */}
+      <VoiceSettingsModal
+        isOpen={isVoiceSettingsOpen}
+        onClose={() => setIsVoiceSettingsOpen(false)}
+        currentSettings={voiceSettings}
+        onSave={setVoiceSettings}
       />
     </div>
   );
