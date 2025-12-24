@@ -777,14 +777,19 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
                     : 'border-zinc-800 hover:border-zinc-600 hover:scale-[1.02]'
                     }`}
                 >
-                  {/* Video Preview - Always Playing Loop */}
+                  {/* Fallback placeholder if video not uploaded yet - behind video */}
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center z-0">
+                    <span className="text-zinc-600 text-xs text-center px-2">Preview loading...</span>
+                  </div>
+
+                  {/* Video Preview - Always Playing Loop - above fallback */}
                   <video
                     src={bg.previewUrl}
                     autoPlay
                     muted
                     loop
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover z-[5]"
                     onError={(e) => {
                       // Fallback to placeholder if video fails to load
                       const target = e.target as HTMLVideoElement;
@@ -792,19 +797,14 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
                     }}
                   />
 
-                  {/* Fallback placeholder if video not uploaded yet */}
-                  <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
-                    <span className="text-zinc-600 text-xs text-center px-2">Preview loading...</span>
-                  </div>
-
                   {/* Overlay */}
                   <div className={`absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all z-10 ${config.backgroundId === bg.id ? 'bg-amber-500/10' : ''}`} />
 
                   {/* Category Badge */}
                   <div className="absolute top-2 left-2 z-20">
                     <span className={`text-[8px] font-bold uppercase px-1.5 py-0.5 rounded ${bg.type === 'long_gameplay' ? 'bg-purple-500/80 text-white' :
-                        bg.type === 'medium_gameplay' ? 'bg-blue-500/80 text-white' :
-                          'bg-pink-500/80 text-white'
+                      bg.type === 'medium_gameplay' ? 'bg-blue-500/80 text-white' :
+                        'bg-pink-500/80 text-white'
                       }`}>
                       {bg.type === 'long_gameplay' ? 'Gameplay' :
                         bg.type === 'medium_gameplay' ? 'Runner' : 'ASMR'}
