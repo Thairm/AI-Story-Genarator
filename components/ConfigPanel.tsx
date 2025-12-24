@@ -777,31 +777,34 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
                     : 'border-zinc-800 hover:border-zinc-600 hover:scale-[1.02]'
                     }`}
                 >
-                  {/* Fallback placeholder if video not uploaded yet - behind video */}
-                  <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center z-0">
-                    <span className="text-zinc-600 text-xs text-center px-2">Preview loading...</span>
+                  {/* Fallback / Loading State */}
+                  <div className="absolute inset-0 w-full h-full bg-zinc-900 flex items-center justify-center z-0">
+                    <span className="text-zinc-600 text-[10px]">Loading...</span>
                   </div>
 
-                  {/* Video Preview - Always Playing Loop - above fallback */}
+                  {/* Video Preview */}
                   <video
                     src={bg.previewUrl}
                     autoPlay
                     muted
                     loop
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover z-[5]"
+                    crossOrigin="anonymous"
+                    className="absolute inset-0 w-full h-full object-cover z-10"
+                    onLoadedData={(e) => {
+                      (e.target as HTMLVideoElement).play().catch(() => { });
+                    }}
                     onError={(e) => {
-                      // Fallback to placeholder if video fails to load
                       const target = e.target as HTMLVideoElement;
                       target.style.display = 'none';
                     }}
                   />
 
                   {/* Overlay */}
-                  <div className={`absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all z-10 ${config.backgroundId === bg.id ? 'bg-amber-500/10' : ''}`} />
+                  <div className={`absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all z-20 ${config.backgroundId === bg.id ? 'bg-amber-500/10' : ''}`} />
 
                   {/* Category Badge */}
-                  <div className="absolute top-2 left-2 z-20">
+                  <div className="absolute top-2 left-2 z-30">
                     <span className={`text-[8px] font-bold uppercase px-1.5 py-0.5 rounded ${bg.type === 'long_gameplay' ? 'bg-purple-500/80 text-white' :
                       bg.type === 'medium_gameplay' ? 'bg-blue-500/80 text-white' :
                         'bg-pink-500/80 text-white'
@@ -812,13 +815,13 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
                   </div>
 
                   {/* Name Label */}
-                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-left z-20">
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-left z-30">
                     <p className="text-xs font-medium text-white line-clamp-2">{bg.name}</p>
                   </div>
 
                   {/* Selected Checkmark */}
                   {config.backgroundId === bg.id && (
-                    <div className="absolute top-2 right-2 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center shadow-md z-20">
+                    <div className="absolute top-2 right-2 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center shadow-md z-30">
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white"><polyline points="20 6 9 17 4 12" /></svg>
                     </div>
                   )}
@@ -870,3 +873,4 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
     </div>
   );
 };
+
