@@ -55,41 +55,63 @@ export const CAPTION_THEMES: CaptionTheme[] = [
   { id: 'clean', name: 'Clean White', primaryColor: '#FFFFFF', secondaryColor: '#000000' },
 ];
 
+// R2 Storage Base URL
+const R2_BASE_URL = 'https://pub-404883f327e545929c96e214f0c46f31.r2.dev';
+
 export const BACKGROUNDS: BackgroundOption[] = [
+  // Long Gameplay (2+ hours) - Random video + random start point
   {
     id: 'minecraft',
     name: 'Minecraft Parkour',
-    thumbnail: 'https://picsum.photos/seed/minecraft_parkour/300/533',
-    videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'
+    type: 'long_gameplay',
+    previewUrl: `${R2_BASE_URL}/minecraft/Minecraft%20video%20preview.mp4`,
+    videos: [
+      // Add full videos here as you upload them
+      // { id: 'mc1', url: `${R2_BASE_URL}/minecraft/full_1.mp4`, duration: 7200 },
+    ]
   },
   {
     id: 'gta',
     name: 'GTA V Ramps',
-    thumbnail: 'https://picsum.photos/seed/gta_ramps/300/533'
+    type: 'long_gameplay',
+    previewUrl: `${R2_BASE_URL}/gta/preview.mp4`,  // Upload this later
+    videos: []
   },
+  // Medium Gameplay (~5 minutes) - Random video, trim from start
   {
     id: 'subway',
     name: 'Subway Surfers',
-    thumbnail: 'https://picsum.photos/seed/subway_surfers/300/533'
+    type: 'medium_gameplay',
+    previewUrl: `${R2_BASE_URL}/subway/preview.mp4`,  // Upload this later
+    videos: []
   },
   {
-    id: 'satisfying',
+    id: 'temple',
+    name: 'Temple Run',
+    type: 'medium_gameplay',
+    previewUrl: `${R2_BASE_URL}/temple/preview.mp4`,  // Upload this later
+    videos: []
+  },
+  // ASMR Clips (3-15 seconds each) - Randomly combine multiple
+  {
+    id: 'slime',
     name: 'Satisfying Slime',
-    thumbnail: 'https://picsum.photos/seed/slime/300/533'
-  },
-  {
-    id: 'hydraulic',
-    name: 'Hydraulic Press',
-    thumbnail: 'https://picsum.photos/seed/hydraulic/300/533'
+    type: 'asmr_clips',
+    previewUrl: `${R2_BASE_URL}/slime/preview.mp4`,  // Upload this later
+    videos: []
   },
   {
     id: 'soap',
     name: 'Soap Cutting',
-    thumbnail: 'https://picsum.photos/seed/soap/300/533'
+    type: 'asmr_clips',
+    previewUrl: `${R2_BASE_URL}/soap/preview.mp4`,  // Upload this later
+    videos: []
   },
   {
-    id: 'wood',
-    name: 'Wood Turning',
-    thumbnail: 'https://picsum.photos/seed/wood/300/533'
+    id: 'sand',
+    name: 'Kinetic Sand',
+    type: 'asmr_clips',
+    previewUrl: `${R2_BASE_URL}/sand/preview.mp4`,  // Upload this later
+    videos: []
   }
 ];

@@ -24,11 +24,21 @@ export const DEFAULT_VOICE_SETTINGS: VoiceSettings = {
   useSpeakerBoost: false
 };
 
+// Background Video Types
+export type BackgroundType = 'long_gameplay' | 'medium_gameplay' | 'asmr_clips';
+
+export interface BackgroundVideo {
+  id: string;
+  url: string;        // Full video URL in R2
+  duration?: number;  // Duration in seconds (for random start calculation)
+}
+
 export interface BackgroundOption {
   id: string;
   name: string;
-  thumbnail: string;
-  videoUrl?: string; // Optional: URL for the video preview
+  type: BackgroundType;
+  previewUrl: string;  // Short looping preview video (5-10 seconds)
+  videos: BackgroundVideo[];  // Full videos for rendering
 }
 
 // New Types for Split System

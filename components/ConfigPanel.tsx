@@ -761,7 +761,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
             </div>
           </section>
 
-          {/* Step 3: Visuals (UNCHANGED) */}
+          {/* Step 3: Background Video */}
           <section>
             <h2 className="text-lg font-semibold text-white flex items-center mb-4">
               <span className="w-6 h-6 rounded-full bg-zinc-800 border border-zinc-700 text-xs flex items-center justify-center mr-3 text-zinc-300">3</span>
@@ -773,29 +773,50 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
                   key={bg.id}
                   onClick={() => updateConfig('backgroundId', bg.id)}
                   className={`group relative flex-shrink-0 w-36 md:w-44 aspect-[9/16] rounded-xl overflow-hidden border-2 transition-all snap-center ${config.backgroundId === bg.id
-                    ? 'border-amber-500 shadow-[0_0_20px_rgba(99,102,241,0.3)] scale-[1.02]'
+                    ? 'border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)] scale-[1.02]'
                     : 'border-zinc-800 hover:border-zinc-600 hover:scale-[1.02]'
                     }`}
                 >
-                  <img
-                    src={bg.thumbnail}
-                    alt={bg.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  {/* Video Preview - Always Playing Loop */}
+                  <video
+                    src={bg.previewUrl}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to placeholder if video fails to load
+                      const target = e.target as HTMLVideoElement;
+                      target.style.display = 'none';
+                    }}
                   />
-                  {bg.videoUrl && (
-                    <video
-                      src={bg.videoUrl}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover z-10"
-                    />
-                  )}
-                  <div className={`absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-20 ${config.backgroundId === bg.id ? 'bg-amber-500/10' : ''}`} />
+
+                  {/* Fallback placeholder if video not uploaded yet */}
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
+                    <span className="text-zinc-600 text-xs text-center px-2">Preview loading...</span>
+                  </div>
+
+                  {/* Overlay */}
+                  <div className={`absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all z-10 ${config.backgroundId === bg.id ? 'bg-amber-500/10' : ''}`} />
+
+                  {/* Category Badge */}
+                  <div className="absolute top-2 left-2 z-20">
+                    <span className={`text-[8px] font-bold uppercase px-1.5 py-0.5 rounded ${bg.type === 'long_gameplay' ? 'bg-purple-500/80 text-white' :
+                        bg.type === 'medium_gameplay' ? 'bg-blue-500/80 text-white' :
+                          'bg-pink-500/80 text-white'
+                      }`}>
+                      {bg.type === 'long_gameplay' ? 'Gameplay' :
+                        bg.type === 'medium_gameplay' ? 'Runner' : 'ASMR'}
+                    </span>
+                  </div>
+
+                  {/* Name Label */}
                   <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-left z-20">
                     <p className="text-xs font-medium text-white line-clamp-2">{bg.name}</p>
                   </div>
+
+                  {/* Selected Checkmark */}
                   {config.backgroundId === bg.id && (
                     <div className="absolute top-2 right-2 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center shadow-md z-20">
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white"><polyline points="20 6 9 17 4 12" /></svg>
