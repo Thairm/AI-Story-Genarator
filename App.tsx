@@ -8,6 +8,7 @@ import { DocumentPanel } from './components/DocumentPanel';
 import { MyVideosPanel } from './components/MyVideosPanel';
 import { AuthModal } from './components/AuthModal';
 import { UserMenu } from './components/UserMenu';
+import { PricingModal } from './components/PricingModal';
 import { VideoConfig, GenerationStatus, UserPlan, SavedVideoProject } from './types';
 import { Profile, Credits } from './services/supabaseClient';
 import { onAuthStateChange, fetchAuthState, getProfile, getCredits } from './services/authService';
@@ -230,7 +231,16 @@ const App: React.FC = () => {
         onSuccess={handleAuthSuccess}
       />
 
-      {/* TODO: Add PricingModal here when implemented */}
+      {/* Pricing Modal */}
+      {user && profile && (
+        <PricingModal
+          isOpen={showPricingModal}
+          onClose={() => setShowPricingModal(false)}
+          userId={user.id}
+          userEmail={user.email || ''}
+          currentPlan={profile.plan}
+        />
+      )}
     </div>
   );
 };
