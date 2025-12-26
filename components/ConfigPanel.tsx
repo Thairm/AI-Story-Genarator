@@ -10,6 +10,8 @@ import { localStorageProvider } from '../services/storage/videoHistoryService';
 import { generateStoryIdea, STORY_CATEGORIES } from '../services/ideaService';
 import SystemPromptModal from './SystemPromptModal';
 import VoiceSettingsModal from './VoiceSettingsModal';
+import { Credits } from '../services/supabaseClient';
+import { User } from '@supabase/supabase-js';
 
 interface ConfigPanelProps {
   config: VideoConfig;
@@ -20,6 +22,10 @@ interface ConfigPanelProps {
   setVideoUrl: (url: string | null) => void;
   setProgress: (progress: number) => void;
   progress: number;
+  // Auth props
+  user?: User | null;
+  credits?: Credits | null;
+  onCreditsUsed?: () => void;
 }
 
 // Helper to generate IDs
@@ -133,7 +139,7 @@ const LiveCaptionPreview = ({
   );
 };
 
-export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConfigChange, setStatus, setVideoUrl, setProgress, progress }) => {
+export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConfigChange, setStatus, setVideoUrl, setProgress, progress, user, credits, onCreditsUsed }) => {
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
@@ -252,16 +258,61 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
     onConfigChange({ ...config, [key]: value });
   };
 
-  const toggleVoicePreview = (e: React.MouseEvent, voiceId: string) => {
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const blobUrlRef = React.useRef<string | null>(null);
+
+  const toggleVoicePreview = async (e: React.MouseEvent, voiceId: string) => {
     e.stopPropagation();
+
+    // Stop current audio if playing
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
+    // Clean up previous blob URL
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
+    }
+
     if (playingVoiceId === voiceId) {
       setPlayingVoiceId(null);
     } else {
-      setPlayingVoiceId(voiceId);
-      // Mock audio play duration
-      setTimeout(() => {
-        setPlayingVoiceId(prev => prev === voiceId ? null : prev);
-      }, 3000);
+      const voice = NARRATORS.find(n => n.id === voiceId);
+      if (voice && voice.previewUrl) {
+        setPlayingVoiceId(voiceId);
+
+        try {
+          // Fetch audio as blob to avoid CORS/format issues
+          const response = await fetch(voice.previewUrl);
+          if (!response.ok) throw new Error('Failed to fetch audio');
+
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          blobUrlRef.current = blobUrl;
+
+          const audio = new Audio(blobUrl);
+          audioRef.current = audio;
+
+          audio.play().catch(err => {
+            console.error("Failed to play preview:", err);
+            setPlayingVoiceId(null);
+          });
+
+          audio.onended = () => {
+            setPlayingVoiceId(null);
+            audioRef.current = null;
+            if (blobUrlRef.current) {
+              URL.revokeObjectURL(blobUrlRef.current);
+              blobUrlRef.current = null;
+            }
+          };
+        } catch (err) {
+          console.error("Failed to fetch preview audio:", err);
+          setPlayingVoiceId(null);
+        }
+      }
     }
   };
 
