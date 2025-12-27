@@ -4,6 +4,8 @@ import { Sidebar, TabId } from './components/Sidebar';
 import { ConfigPanel } from './components/ConfigPanel';
 import { PreviewPanel } from './components/PreviewPanel';
 import { LandingPage } from './components/LandingPage';
+import { TermsPage } from './components/TermsPage';
+import { PrivacyPage } from './components/PrivacyPage';
 import { DocumentPanel } from './components/DocumentPanel';
 import { MyVideosPanel } from './components/MyVideosPanel';
 import { AuthModal } from './components/AuthModal';
@@ -43,7 +45,7 @@ const INITIAL_CONFIG: VideoConfig = {
   backgroundId: 'minecraft'
 };
 
-type ViewMode = 'landing' | 'studio';
+type ViewMode = 'landing' | 'studio' | 'terms' | 'privacy';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('landing');
@@ -145,10 +147,21 @@ const App: React.FC = () => {
     setView('landing');
   };
 
+  if (view === 'terms') {
+    return <TermsPage onBack={() => setView('landing')} />;
+  }
+
+  if (view === 'privacy') {
+    return <PrivacyPage onBack={() => setView('landing')} />;
+  }
+
   if (view === 'landing') {
     return (
       <>
-        <LandingPage onLaunch={launchStudio} />
+        <LandingPage
+          onLaunch={launchStudio}
+          onNavigate={(page) => setView(page)}
+        />
         <AuthModal
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}

@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { LayoutTemplate, ArrowRight, Sparkles, Mic2, MonitorPlay, Check, Zap, Globe, Wand2 } from 'lucide-react';
+import { LayoutTemplate, ArrowRight, Sparkles, Mic2, MonitorPlay, Check, Zap, Globe, Wand2, Mail } from 'lucide-react';
 
 interface LandingPageProps {
     onLaunch: () => void;
+    onNavigate?: (page: 'terms' | 'privacy') => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch, onNavigate }) => {
     return (
         <div className="min-h-screen bg-zinc-950 text-white font-sans selection:bg-amber-500/30 overflow-y-auto">
 
@@ -244,49 +245,49 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
                         {/* Starter */}
                         <div className="p-8 rounded-2xl border border-zinc-800 bg-zinc-950 flex flex-col">
                             <div className="mb-8">
-                                <h3 className="text-lg font-medium text-zinc-300 mb-2">Starter</h3>
+                                <h3 className="text-lg font-medium text-zinc-300 mb-2">Free</h3>
                                 <p className="text-4xl font-bold text-white">$0<span className="text-base text-zinc-500 font-normal">/mo</span></p>
                             </div>
                             <ul className="space-y-4 mb-8 flex-1">
-                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> 2 Videos per month</li>
-                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> 720p Export</li>
-                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> Standard Voices</li>
-                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> Watermarked</li>
+                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> 500 credits/month</li>
+                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> ~5 videos</li>
+                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> All voices included</li>
+                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> 1080p Export</li>
                             </ul>
                             <button onClick={onLaunch} className="w-full py-3 rounded-xl border border-zinc-800 text-white font-medium hover:bg-zinc-900 transition-colors">Start for Free</button>
                         </div>
 
-                        {/* Creator Pro */}
+                        {/* Starter Plan */}
                         <div className="p-8 rounded-2xl border-2 border-orange-500 bg-zinc-900/50 flex flex-col relative scale-105 shadow-2xl shadow-orange-900/20">
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
                                 Most Popular
                             </div>
                             <div className="mb-8">
-                                <h3 className="text-lg font-medium text-orange-400 mb-2">Creator Pro</h3>
-                                <p className="text-4xl font-bold text-white">$29<span className="text-base text-zinc-500 font-normal">/mo</span></p>
+                                <h3 className="text-lg font-medium text-orange-400 mb-2">Starter</h3>
+                                <p className="text-4xl font-bold text-white">$9.99<span className="text-base text-zinc-500 font-normal">/mo</span></p>
                             </div>
                             <ul className="space-y-4 mb-8 flex-1">
-                                <li className="flex items-center text-white"><Check className="w-4 h-4 text-amber-500 mr-3" /> 30 Videos per month</li>
-                                <li className="flex items-center text-white"><Check className="w-4 h-4 text-amber-500 mr-3" /> 1080p 60fps Export</li>
-                                <li className="flex items-center text-white"><Check className="w-4 h-4 text-amber-500 mr-3" /> Premium ElevenLabs Voices</li>
-                                <li className="flex items-center text-white"><Check className="w-4 h-4 text-amber-500 mr-3" /> No Watermark</li>
+                                <li className="flex items-center text-white"><Check className="w-4 h-4 text-amber-500 mr-3" /> 3,500 credits/month</li>
+                                <li className="flex items-center text-white"><Check className="w-4 h-4 text-amber-500 mr-3" /> ~35 videos</li>
+                                <li className="flex items-center text-white"><Check className="w-4 h-4 text-amber-500 mr-3" /> 50 audio redos/month</li>
+                                <li className="flex items-center text-white"><Check className="w-4 h-4 text-amber-500 mr-3" /> Priority generation</li>
                             </ul>
                             <button onClick={onLaunch} className="w-full py-3 rounded-xl bg-orange-500 text-white font-bold hover:bg-amber-500 transition-colors">Get Started</button>
                         </div>
 
-                        {/* Agency */}
+                        {/* Pro */}
                         <div className="p-8 rounded-2xl border border-zinc-800 bg-zinc-950 flex flex-col">
                             <div className="mb-8">
-                                <h3 className="text-lg font-medium text-zinc-300 mb-2">Agency</h3>
-                                <p className="text-4xl font-bold text-white">$99<span className="text-base text-zinc-500 font-normal">/mo</span></p>
+                                <h3 className="text-lg font-medium text-zinc-300 mb-2">Pro</h3>
+                                <p className="text-4xl font-bold text-white">$19.99<span className="text-base text-zinc-500 font-normal">/mo</span></p>
                             </div>
                             <ul className="space-y-4 mb-8 flex-1">
-                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> Unlimited Videos</li>
-                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> Priority Rendering</li>
-                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> Custom Branding</li>
-                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> API Access</li>
+                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> 6,500 credits/month</li>
+                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> ~65 videos</li>
+                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> 100 audio redos/month</li>
+                                <li className="flex items-center text-zinc-400"><Check className="w-4 h-4 text-zinc-600 mr-3" /> Early access features</li>
                             </ul>
-                            <button onClick={onLaunch} className="w-full py-3 rounded-xl border border-zinc-800 text-white font-medium hover:bg-zinc-900 transition-colors">Contact Sales</button>
+                            <button onClick={onLaunch} className="w-full py-3 rounded-xl border border-zinc-800 text-white font-medium hover:bg-zinc-900 transition-colors">Upgrade to Pro</button>
                         </div>
                     </div>
                 </div>
@@ -294,24 +295,59 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
 
             {/* Footer */}
             <footer className="py-12 px-6 border-t border-zinc-800 bg-zinc-950">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-                    <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                        <div className="w-6 h-6 bg-zinc-800 rounded flex items-center justify-center">
-                            <LayoutTemplate className="w-3 h-3 text-zinc-400" />
+                <div className="max-w-7xl mx-auto">
+                    {/* Top Row */}
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                        <div className="flex items-center space-x-2 mb-6 md:mb-0">
+                            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                                <LayoutTemplate className="w-4 h-4 text-white" />
+                            </div>
+                            <span className="text-xl font-bold text-white">StoryForge</span>
                         </div>
-                        <span className="text-lg font-bold text-zinc-300">StoryForge</span>
+
+                        {/* Contact Info */}
+                        <div className="flex items-center space-x-6">
+                            <a href="mailto:support@storyforge.app" className="flex items-center text-zinc-400 hover:text-white transition-colors">
+                                <Mail className="w-4 h-4 mr-2" />
+                                support@storyforge.app
+                            </a>
+                        </div>
                     </div>
 
-                    <div className="flex space-x-8 text-sm text-zinc-500">
-                        <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                        <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-                        <a href="#" className="hover:text-white transition-colors">Twitter</a>
+                    {/* Middle Row - Description */}
+                    <div className="mb-8">
+                        <p className="text-zinc-500 text-sm max-w-2xl">
+                            StoryForge is an AI-powered video generation platform. Create viral short-form content with AI-generated scripts,
+                            realistic voiceovers, and engaging background videos. Perfect for TikTok, YouTube Shorts, and Instagram Reels.
+                        </p>
                     </div>
-                </div>
-                <div className="max-w-7xl mx-auto mt-8 text-center text-xs text-zinc-600">
-                    &copy; {new Date().getFullYear()} StoryForge AI Inc. All rights reserved.
+
+                    {/* Bottom Row */}
+                    <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-zinc-800">
+                        <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-zinc-500 mb-4 md:mb-0">
+                            <button
+                                onClick={() => onNavigate?.('privacy')}
+                                className="hover:text-white transition-colors"
+                            >
+                                Privacy Policy
+                            </button>
+                            <button
+                                onClick={() => onNavigate?.('terms')}
+                                className="hover:text-white transition-colors"
+                            >
+                                Terms of Service
+                            </button>
+                            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+                            <a href="#features" className="hover:text-white transition-colors">Features</a>
+                        </div>
+
+                        <div className="text-xs text-zinc-600">
+                            © {new Date().getFullYear()} StoryForge. All rights reserved.
+                        </div>
+                    </div>
                 </div>
             </footer>
         </div>
     )
 }
+
