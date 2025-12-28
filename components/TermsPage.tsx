@@ -144,7 +144,8 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onBack }) => {
                         <p className="text-zinc-300 leading-relaxed">
                             If you have questions about these Terms, please contact us at:
                         </p>
-                        <p className="text-orange-400 mt-2">support@storyforge.app</p>
+                        <p className="text-orange-400 mt-2">Email: Thairm5719@proton.me</p>
+                        <p className="text-orange-400">Phone: +81 80 1217 8914</p>
                     </section>
                 </div>
             </main>

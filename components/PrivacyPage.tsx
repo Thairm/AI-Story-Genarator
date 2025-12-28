@@ -124,7 +124,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onBack }) => {
                             <li>Opt out of marketing communications</li>
                         </ul>
                         <p className="text-zinc-300 leading-relaxed mt-3">
-                            To exercise these rights, contact us at support@storyforge.app.
+                            To exercise these rights, contact us at Thairm5719@proton.me or call +81 80 1217 8914.
                         </p>
                     </section>
 
@@ -165,7 +165,8 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onBack }) => {
                         <p className="text-zinc-300 leading-relaxed">
                             If you have questions about this Privacy Policy or our data practices, contact us at:
                         </p>
-                        <p className="text-orange-400 mt-2">support@storyforge.app</p>
+                        <p className="text-orange-400 mt-2">Email: Thairm5719@proton.me</p>
+                        <p className="text-orange-400">Phone: +81 80 1217 8914</p>
                     </section>
                 </div>
             </main>
