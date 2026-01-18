@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { VideoConfig, GenerationStatus, ScriptSection, ScriptSentence, VoiceSettings, DEFAULT_VOICE_SETTINGS, DEFAULT_SYSTEM_PROMPT } from '../types';
+import { VideoConfig, GenerationStatus, ScriptSection, ScriptSentence, VoiceSettings, DEFAULT_VOICE_SETTINGS, DEFAULT_HORROR_SYSTEM_PROMPT } from '../types';
 import { NARRATORS, IMAGE_STYLES } from '../constants';
-import { Wand2, ScrollText, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, Image as ImageIcon, Sparkles, ChevronDown, Rocket, LayoutTemplate, Palette } from 'lucide-react';
+import { Wand2, ScrollText, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, Image as ImageIcon, Sparkles, ChevronDown, Rocket, LayoutTemplate, Palette, Settings } from 'lucide-react';
 import { enhanceStoryPrompt } from '../services/geminiService';
 import { generateSpeech } from '../services/audioService';
 import { generateImageForScene } from '../services/imageService';
@@ -45,7 +45,7 @@ export const ImageStoryConfigPanel: React.FC<ImageStoryConfigPanelProps> = ({ co
     const [isEnhancing, setIsEnhancing] = useState(false);
     const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
     const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
-    const [customSystemPrompt, setCustomSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
+    const [customSystemPrompt, setCustomSystemPrompt] = useState(DEFAULT_HORROR_SYSTEM_PROMPT);
     const [selectedCategory, setSelectedCategory] = useState('random');
     const [isGeneratingIdea, setIsGeneratingIdea] = useState(false);
     const [voiceSettings, setVoiceSettings] = useState<VoiceSettings>(DEFAULT_VOICE_SETTINGS);
@@ -227,10 +227,19 @@ export const ImageStoryConfigPanel: React.FC<ImageStoryConfigPanelProps> = ({ co
 
                     {/* 1. Story Concept */}
                     <section className="bg-zinc-900/50 rounded-2xl border border-zinc-800 p-6">
-                        <h2 className="text-lg font-semibold text-white flex items-center mb-6">
-                            <span className="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-xs flex items-center justify-center mr-3 border border-purple-500/20">1</span>
-                            Story Concept
-                        </h2>
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-lg font-semibold text-white flex items-center">
+                                <span className="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-xs flex items-center justify-center mr-3 border border-purple-500/20">1</span>
+                                Story Concept
+                            </h2>
+                            <button
+                                onClick={() => setIsPromptModalOpen(true)}
+                                className="p-2 hover:bg-zinc-800 rounded-lg transition-colors group"
+                                title="Customize AI System Prompt"
+                            >
+                                <Settings className="w-4 h-4 text-zinc-500 group-hover:text-purple-400 transition-colors" />
+                            </button>
+                        </div>
 
                         <div className="flex items-center gap-3 mb-4">
                             <div className="relative">
@@ -389,6 +398,14 @@ export const ImageStoryConfigPanel: React.FC<ImageStoryConfigPanelProps> = ({ co
 
                 </div>
             </div>
+
+            {/* System Prompt Modal */}
+            <SystemPromptModal
+                isOpen={isPromptModalOpen}
+                onClose={() => setIsPromptModalOpen(false)}
+                currentPrompt={customSystemPrompt}
+                onSave={setCustomSystemPrompt}
+            />
         </div>
     );
 };
