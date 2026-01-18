@@ -72,6 +72,13 @@ export interface WordTimestamp {
   end: number;
 }
 
+export interface ImageStyle {
+  id: string;
+  name: string;
+  promptModifier: string;
+  previewUrl: string; // Local asset or remote URL
+}
+
 export interface ScriptSentence {
   id: string;
   text: string;
@@ -79,6 +86,9 @@ export interface ScriptSentence {
   audioUrl?: string; // Blob URL of the generated audio
   duration?: number; // Duration in seconds
   wordTimestamps?: WordTimestamp[]; // Word-level timing relative to the start of this sentence
+  // New fields for Image Stories
+  imageUrl?: string;
+  imagePrompt?: string;
 }
 
 export interface ScriptSection {
@@ -99,12 +109,15 @@ export interface VideoConfig {
   captionX: number; // Horizontal position percentage (0-100)
   captionScale: number; // Font scale multiplier (default 1.0)
   backgroundId: string;
+  // For Image Stories
+  imageStyleId?: string;
 }
 
 export enum GenerationStatus {
   IDLE = 'IDLE',
   GENERATING_SCRIPT = 'GENERATING_SCRIPT',
   GENERATING_AUDIO = 'GENERATING_AUDIO',
+  GENERATING_IMAGES = 'GENERATING_IMAGES',
   GENERATING_VIDEO = 'GENERATING_VIDEO',
   COMPLETED = 'COMPLETED',
   ERROR = 'ERROR'

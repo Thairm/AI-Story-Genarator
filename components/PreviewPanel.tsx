@@ -209,15 +209,38 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({ config, status, vide
               />
             ) : (
               <>
-                {selectedBg && (
+                {/* Image Story Preview */}
+                {config.imageStyleId && config.script?.[0]?.sentences?.[0]?.imageUrl ? (
                   <div className="relative w-full h-full pointer-events-none">
                     <img
-                      src={selectedBg.thumbnail}
-                      alt="Preview"
-                      className={`w-full h-full object-cover transition-all duration-700 ${isLoading ? 'scale-105 blur-sm brightness-50' : 'brightness-75'}`}
+                      src={config.script[0].sentences[0].imageUrl}
+                      alt="Scene Preview"
+                      className="w-full h-full object-cover brightness-75"
                     />
-                    {/* Overlay Gradient for Text Readability */}
                     <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60"></div>
+                  </div>
+                ) : (
+                  /* Video Background Preview */
+                  selectedBg && (
+                    <div className="relative w-full h-full pointer-events-none">
+                      <video
+                        src={selectedBg.previewUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className={`w-full h-full object-cover transition-all duration-700 ${isLoading ? 'scale-105 blur-sm brightness-50' : 'brightness-75'}`}
+                      />
+                      {/* Overlay Gradient for Text Readability */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60"></div>
+                    </div>
+                  )
+                )}
+
+                {/* Fallback if nothing */}
+                {!selectedBg && !config.imageStyleId && (
+                  <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-zinc-700">
+                    <span className="text-xs uppercase">No Background</span>
                   </div>
                 )}
               </>

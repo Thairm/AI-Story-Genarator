@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, Image, Newspaper, MessagesSquare, Quote, Sparkles } from 'lucide-react';
+import { MessageSquare, Image, Ghost, Newspaper, MessagesSquare, Quote, Sparkles } from 'lucide-react';
 
 export type ContentType = 'reddit-story' | 'image-story' | 'news-story' | 'chat-story' | 'quote-video';
 
@@ -23,11 +23,11 @@ const CONTENT_TYPES: ContentTypeOption[] = [
     },
     {
         id: 'image-story',
-        name: 'Image Story',
-        description: 'Stories with AI-generated images for each scene',
-        icon: <Image size={32} />,
-        available: false,
-        gradient: 'from-purple-500 to-pink-600',
+        name: 'AI Horror Story',
+        description: 'Spooky stories with AI-generated visual scenes',
+        icon: <Ghost size={32} />,
+        available: true,
+        gradient: 'from-purple-600 to-indigo-900',
     },
     {
         id: 'news-story',

@@ -1,5 +1,5 @@
 
-import { BackgroundOption, Narrator, CaptionAnimation, CaptionTheme, CaptionFont } from "./types";
+import { BackgroundOption, Narrator, CaptionAnimation, CaptionTheme, CaptionFont, ImageStyle } from "./types";
 
 export const NARRATORS: Narrator[] = [
   // Male Voices
@@ -124,5 +124,44 @@ export const BACKGROUNDS: BackgroundOption[] = [
     type: 'asmr_clips',
     previewUrl: `${R2_BASE_URL}/sand/preview.mp4`,  // Upload this later
     videos: []
+  }
+];
+
+export const IMAGE_STYLES: ImageStyle[] = [
+  {
+    id: 'realistic_horror',
+    name: 'Photorealistic Horror',
+    promptModifier: 'cinematic 8k horror photography, hyperrealistic, dark atmosphere, eerie lighting, high detail, terrifying realism, 9:16 aspect ratio',
+    previewUrl: 'https://images.unsplash.com/photo-1542382156909-9ae37b3f56fd?q=80&w=300&auto=format&fit=crop' // Placeholder
+  },
+  {
+    id: 'found_footage',
+    name: 'Found Footage',
+    promptModifier: 'found footage style, VHS glitch effect, shaky camera aesthetic, night vision, grainy texture, analog horror, 1999 camcorder, 9:16 aspect ratio',
+    previewUrl: 'https://images.unsplash.com/photo-1610337673044-69c3113ac140?q=80&w=300&auto=format&fit=crop'
+  },
+  {
+    id: 'junji_ito',
+    name: 'Manga Horror',
+    promptModifier: 'junji ito style, black and white horror manga, intricate line work, spiral patterns, body horror, terrifying illustration, ink drawing, 9:16 aspect ratio',
+    previewUrl: 'https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=300&auto=format&fit=crop'
+  },
+  {
+    id: 'vintage_photo',
+    name: 'Cursed Vintage Photo',
+    promptModifier: 'antique photograph from 1800s, sepia tone, damaged photo, ghostly apparition, haunted victorian photography, scratches and noise, 9:16 aspect ratio',
+    previewUrl: 'https://images.unsplash.com/photo-1518384401463-d3876163c195?q=80&w=300&auto=format&fit=crop'
+  },
+  {
+    id: 'comic_horror',
+    name: 'Retro Horror Comic',
+    promptModifier: '1950s horror comic book style, ec comics, vibrant dark colors, dramatic shading, pulp aesthetic, retro illustration, 9:16 aspect ratio',
+    previewUrl: 'https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?q=80&w=300&auto=format&fit=crop'
+  },
+  {
+    id: 'liminal_space',
+    name: 'Liminal Space',
+    promptModifier: 'liminal space, backrooms aesthetic, empty hallway, uncanny valley, dreamcore, weirdcore, unsettling emptiness, buzzing fluorescent lights, 9:16 aspect ratio',
+    previewUrl: 'https://images.unsplash.com/photo-1605218427335-51475751d07c?q=80&w=300&auto=format&fit=crop'
   }
 ];

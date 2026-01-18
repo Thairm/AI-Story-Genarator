@@ -12,6 +12,7 @@ import { AuthModal } from './components/AuthModal';
 import { UserMenu } from './components/UserMenu';
 import { PricingModal } from './components/PricingModal';
 import { ContentTypeSelector, ContentType } from './components/ContentTypeSelector';
+import { ImageStoryConfigPanel } from './components/ImageStoryConfigPanel';
 import { VideoConfig, GenerationStatus, UserPlan, SavedVideoProject } from './types';
 import { Profile, Credits } from './services/supabaseClient';
 import { onAuthStateChange, fetchAuthState, getProfile, getCredits } from './services/authService';
@@ -219,6 +220,24 @@ const App: React.FC = () => {
         {/* Reddit Story Editor */}
         {activeTab === 'generate-video' && selectedContentType === 'reddit-story' && (
           <ConfigPanel
+            config={config}
+            status={status}
+            onConfigChange={setConfig}
+            onGenerate={handleGenerate}
+            setStatus={setStatus}
+            setVideoUrl={setVideoUrl}
+            setProgress={setProgress}
+            progress={progress}
+            user={user}
+            credits={credits}
+            onCreditsUsed={refreshCredits}
+            onBack={handleBackToSelector}
+          />
+        )}
+
+        {/* AI Horror Story Editor */}
+        {activeTab === 'generate-video' && selectedContentType === 'image-story' && (
+          <ImageStoryConfigPanel
             config={config}
             status={status}
             onConfigChange={setConfig}
