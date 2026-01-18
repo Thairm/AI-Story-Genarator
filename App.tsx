@@ -125,11 +125,12 @@ const App: React.FC = () => {
   };
 
   const launchStudio = () => {
-    // If not logged in, show auth modal
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
+    // DEV MODE: Skip auth check for development
+    // TODO: Re-enable auth before production
+    // if (!user) {
+    //   setShowAuthModal(true);
+    //   return;
+    // }
     setView('studio');
     window.scrollTo(0, 0);
   };
