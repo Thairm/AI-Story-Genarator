@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { VideoConfig, GenerationStatus, ScriptSection, ScriptSentence, AnimationType, DEFAULT_SYSTEM_PROMPT, VoiceSettings, DEFAULT_VOICE_SETTINGS } from '../types';
 import { NARRATORS, BACKGROUNDS, CAPTION_ANIMATIONS, CAPTION_THEMES, CAPTION_FONTS } from '../constants';
-import { Wand2, ScrollText, Captions, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, AlertCircle, Palette, Type as TypeIcon, Settings, Sparkles, ChevronDown, Menu } from 'lucide-react';
+import { Wand2, ScrollText, Captions, Play, Trash2, Plus, GripVertical, RefreshCw, Volume2, Pause, AlertCircle, Palette, Type as TypeIcon, Settings, Sparkles, ChevronDown, Menu, ChevronLeft } from 'lucide-react';
 import { enhanceStoryPrompt } from '../services/geminiService';
 import { renderVideo } from '../services/videoRenderer';
 import { generateSpeech } from '../services/audioService';
@@ -26,6 +26,8 @@ interface ConfigPanelProps {
   user?: User | null;
   credits?: Credits | null;
   onCreditsUsed?: () => void;
+  // Navigation
+  onBack?: () => void;
 }
 
 // Helper to generate IDs
@@ -139,7 +141,7 @@ const LiveCaptionPreview = ({
   );
 };
 
-export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConfigChange, setStatus, setVideoUrl, setProgress, progress, user, credits, onCreditsUsed }) => {
+export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConfigChange, setStatus, setVideoUrl, setProgress, progress, user, credits, onCreditsUsed, onBack }) => {
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
@@ -392,6 +394,15 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, status, onConf
     <div className="flex-1 h-full overflow-y-auto bg-zinc-900">
       <div className="max-w-3xl mx-auto px-8 py-10 pb-32">
         <header className="mb-10">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="flex items-center gap-1 text-zinc-400 hover:text-white mb-4 transition-colors group"
+            >
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+              <span className="text-sm">Back to Content Types</span>
+            </button>
+          )}
           <h1 className="text-3xl font-bold text-white tracking-tight">AI Reddit Story</h1>
           <p className="text-zinc-400 mt-2">Generate a viral Reddit-style story from a simple prompt.</p>
         </header>

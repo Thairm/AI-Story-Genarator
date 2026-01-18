@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { LayoutTemplate, PlusCircle, FileVideo, Mic2, Settings, User, Image, FileText } from 'lucide-react';
+import { LayoutTemplate, Video, FileVideo, Mic2, Settings, User, FileText } from 'lucide-react';
 
-export type TabId = 'reddit-story' | 'image-story' | 'my-videos' | 'voice-library' | 'settings' | 'document';
+export type TabId = 'generate-video' | 'my-videos' | 'voice-library' | 'settings' | 'document';
 
 interface SidebarProps {
   onLogoClick: () => void;
@@ -28,22 +28,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ onLogoClick, activeTab, onTabC
         {/* Navigation */}
         <nav className="mt-6 px-2 lg:px-4 space-y-2">
           <NavItem
-            icon={<PlusCircle size={20} />}
-            label="AI Reddit Story"
-            active={activeTab === 'reddit-story'}
-            onClick={() => onTabChange('reddit-story')}
+            icon={<Video size={20} />}
+            label="Generate Video"
+            active={activeTab === 'generate-video'}
+            onClick={() => onTabChange('generate-video')}
           />
           <NavItem
             icon={<FileText size={20} />}
             label="Document"
             active={activeTab === 'document'}
             onClick={() => onTabChange('document')}
-          />
-          <NavItem
-            icon={<Image size={20} />}
-            label="AI Story with image"
-            active={activeTab === 'image-story'}
-            onClick={() => onTabChange('image-story')}
           />
           <NavItem
             icon={<FileVideo size={20} />}
@@ -94,8 +88,8 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, active, onClick }) => {
     <button
       onClick={onClick}
       className={`w-full flex items-center justify-center lg:justify-start px-3 py-3 rounded-lg transition-all group ${active
-          ? 'bg-amber-500/10 text-orange-400 ring-1 ring-amber-500/50'
-          : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+        ? 'bg-amber-500/10 text-orange-400 ring-1 ring-amber-500/50'
+        : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
         }`}
     >
       <span className={`${active ? 'text-orange-400' : 'group-hover:text-white'}`}>{icon}</span>

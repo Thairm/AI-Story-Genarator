@@ -11,6 +11,7 @@ import { MyVideosPanel } from './components/MyVideosPanel';
 import { AuthModal } from './components/AuthModal';
 import { UserMenu } from './components/UserMenu';
 import { PricingModal } from './components/PricingModal';
+import { ContentTypeSelector, ContentType } from './components/ContentTypeSelector';
 import { VideoConfig, GenerationStatus, UserPlan, SavedVideoProject } from './types';
 import { Profile, Credits } from './services/supabaseClient';
 import { onAuthStateChange, fetchAuthState, getProfile, getCredits } from './services/authService';
@@ -49,7 +50,8 @@ type ViewMode = 'landing' | 'studio' | 'terms' | 'privacy';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('landing');
-  const [activeTab, setActiveTab] = useState<TabId>('reddit-story');
+  const [activeTab, setActiveTab] = useState<TabId>('generate-video');
+  const [selectedContentType, setSelectedContentType] = useState<ContentType | null>(null);
   const [config, setConfig] = useState<VideoConfig>(INITIAL_CONFIG);
   const [status, setStatus] = useState<GenerationStatus>(GenerationStatus.IDLE);
 
@@ -118,7 +120,21 @@ const App: React.FC = () => {
   // Handler to restore a project from My Videos
   const handleRestoreProject = (project: SavedVideoProject) => {
     setConfig(project.config);
-    setActiveTab('reddit-story');
+    setActiveTab('generate-video');
+    setSelectedContentType('reddit-story');
+    setStatus(GenerationStatus.IDLE);
+    setVideoUrl(null);
+    setProgress(0);
+  };
+
+  // Handler for selecting a content type
+  const handleSelectContentType = (type: ContentType) => {
+    setSelectedContentType(type);
+  };
+
+  // Handler to go back to content type selection
+  const handleBackToSelector = () => {
+    setSelectedContentType(null);
     setStatus(GenerationStatus.IDLE);
     setVideoUrl(null);
     setProgress(0);
@@ -195,7 +211,13 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'reddit-story' && (
+        {/* Generate Video Tab */}
+        {activeTab === 'generate-video' && !selectedContentType && (
+          <ContentTypeSelector onSelectType={handleSelectContentType} />
+        )}
+
+        {/* Reddit Story Editor */}
+        {activeTab === 'generate-video' && selectedContentType === 'reddit-story' && (
           <ConfigPanel
             config={config}
             status={status}
@@ -208,8 +230,10 @@ const App: React.FC = () => {
             user={user}
             credits={credits}
             onCreditsUsed={refreshCredits}
+            onBack={handleBackToSelector}
           />
         )}
+
         {activeTab === 'document' && (
           <DocumentPanel />
         )}
@@ -220,7 +244,7 @@ const App: React.FC = () => {
           />
         )}
         {/* Placeholders for other tabs */}
-        {activeTab !== 'reddit-story' && activeTab !== 'document' && activeTab !== 'my-videos' && (
+        {activeTab !== 'generate-video' && activeTab !== 'document' && activeTab !== 'my-videos' && (
           <div className="flex-1 flex items-center justify-center text-zinc-500">
             <p>{activeTab} Content Coming Soon</p>
           </div>
@@ -228,7 +252,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Column 3: Preview */}
-      {activeTab === 'reddit-story' && (
+      {activeTab === 'generate-video' && selectedContentType === 'reddit-story' && (
         <PreviewPanel
           config={config}
           onConfigChange={setConfig}
